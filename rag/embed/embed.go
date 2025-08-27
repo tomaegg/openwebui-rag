@@ -3,7 +3,6 @@ package embed
 import (
 	"context"
 
-	"github.com/joho/godotenv"
 	"github.com/ollama/ollama/api"
 	log "github.com/sirupsen/logrus"
 )
@@ -17,11 +16,6 @@ var client *api.Client
 
 func init() {
 	var err error
-
-	err = godotenv.Load()
-	if err != nil {
-		log.Fatal(err)
-	}
 
 	client, err = api.ClientFromEnvironment()
 	if err != nil {

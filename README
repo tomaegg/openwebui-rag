@@ -2,4 +2,8 @@
 
 浏览器进入milvus [管理界面](http://localhost:9091/webui)
 
-## TODO
+## Developement
+
+```shell
+go tool task ...
+```

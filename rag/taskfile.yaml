@@ -1,0 +1,13 @@
+version: '3'
+
+tasks:
+  migrate:
+    desc: Run DB migration
+    cmds:
+      - go run -v cmd/migration/main.go
+
+  embed:
+    desc: Run embedding
+    dotenv: [".env"]
+    cmds:
+      - go run -v cmd/embed/main.go
