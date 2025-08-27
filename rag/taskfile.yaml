@@ -22,8 +22,8 @@ tasks:
     cmds:
       - docker compose up -d
 
-  restart:
-    desc: restart RAG service
+  recreate:
+    desc: recreate RAG service
     cmds:
       - task: build
       - task: up

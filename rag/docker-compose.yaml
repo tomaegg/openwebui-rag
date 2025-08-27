@@ -3,7 +3,7 @@ services:
     build:
       context: ./split # 构建上下文目录
       dockerfile: Dockerfile # Dockerfile 文件相对 context 的路径
-    image: text-split-server:latest
+    image: rag/text-split-server:latest
     container_name: text-splitter
     ports:
       - "9999:8000"
