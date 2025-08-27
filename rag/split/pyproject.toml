@@ -1,0 +1,16 @@
+[project]
+name = "text-splitter-api"
+version = "0.1.0"
+description = "FastAPI service for splitting text with LangChain"
+authors = [{ name = "Rick Chen" }]
+requires-python = ">=3.11"
+
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "langchain",
+    "langchain-community",
+]
+
+[tool.uv]
+index-url = "https://pypi.tuna.tsinghua.edu.cn/simple"

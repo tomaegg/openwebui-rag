@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 tasks:
   migrate:
@@ -11,3 +11,23 @@ tasks:
     dotenv: [".env"]
     cmds:
       - go run -v cmd/embed/main.go
+
+  build:
+    desc: Build RAG service
+    cmds:
+      - docker compose build
+
+  up:
+    desc: Launch RAG service
+    cmds:
+      - docker compose up -d
+
+  down:
+    desc: Launch RAG service
+    cmds:
+      - docker compose down
+
+  split-openapi:
+    desc: Splitter openapi
+    cmds:
+      - curl localhost:9999/openapi.json
