@@ -11,7 +11,7 @@ class TextSplitter:
     def __init__(
         self,
         target_chunk_size: int = 512,
-        chunk_overlap: int = 0,
+        chunk_overlap: int = 53,
         separators: Optional[list[str]] = None,
         keep_separator: bool = False,
     ) -> None:
@@ -25,18 +25,18 @@ class TextSplitter:
             keep_separator=keep_separator,
         )
 
-    def split(self, text: str) -> list[str]:
+    def split(self, text: list[str]) -> list[str]:
         """执行文本切分"""
-        tmp = self.text_splitter.create_documents([text])
+        tmp = self.text_splitter.create_documents(text)
         return [t.page_content for t in tmp]
 
 
 # ----------- FastAPI 部分 -----------
 
 class SplitRequest(BaseModel):
-    text: str
+    text: list[str]
     target_chunk_size: int = 512
-    chunk_overlap: int = 0
+    chunk_overlap: int = 53
     separators: Optional[List[str]] = None
     keep_separator: bool = False
 
@@ -45,18 +45,13 @@ class SplitResponse(BaseModel):
     chunks: List[str]
     count: int
 
+splitter = TextSplitter()
 
 @app.post("/split", response_model=SplitResponse)
 def split_text(req: SplitRequest):
-    splitter = TextSplitter(
-        target_chunk_size=req.target_chunk_size,
-        chunk_overlap=req.chunk_overlap,
-        separators=req.separators,
-        keep_separator=req.keep_separator,
-    )
     chunks = splitter.split(req.text)
+    # TODO: 如果不是默认参数，需要新建splitter, 暂时不考虑
     return SplitResponse(chunks=chunks, count=len(chunks))
-
 
 @app.get("/")
 def root():

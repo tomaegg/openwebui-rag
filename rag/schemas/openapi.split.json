@@ -78,7 +78,10 @@
       "SplitRequest": {
         "properties": {
           "text": {
-            "type": "string",
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
             "title": "Text"
           },
           "target_chunk_size": {
@@ -89,7 +92,7 @@
           "chunk_overlap": {
             "type": "integer",
             "title": "Chunk Overlap",
-            "default": 0
+            "default": 53
           },
           "separators": {
             "anyOf": [

@@ -2,38 +2,44 @@ version: "3"
 
 tasks:
   migrate:
-    desc: Run DB migration
+    desc: run DB migration
     cmds:
       - go run -v cmd/migration/main.go
 
   embed:
-    desc: Run embedding
+    desc: run embedding
     dotenv: [".env"]
     cmds:
       - go run -v cmd/embed/main.go
 
   build:
-    desc: Build RAG service
+    desc: build RAG service
     cmds:
       - docker compose build
 
   up:
-    desc: Launch RAG service
+    desc: launch RAG service
     cmds:
       - docker compose up -d
 
+  restart:
+    desc: restart RAG service
+    cmds:
+      - task: build
+      - task: up
+
   down:
-    desc: Launch RAG service
+    desc: down RAG service
     cmds:
       - docker compose down
 
-  update-schema:
-    desc: splitter openapi
+  update-split-schema:
+    desc: update splitter openapi
     cmds:
       - curl localhost:9999/openapi.json | jq > schemas/openapi.split.json
 
-  generate-schema:
-    desc: splitter openapi
+  generate-split-schema:
+    desc: generate splitter from openapi
     cmds:
       - >
         docker run --rm
@@ -43,3 +49,9 @@ tasks:
         -g go
         -o /local/generated/split
         --additional-properties=packageName=split
+
+  split-schema:
+    desc: generate split schema
+    cmds:
+      - task: update-split-schema
+      - task: generate-split-schema

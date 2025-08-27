@@ -21,7 +21,7 @@ var _ MappedNullable = &SplitRequest{}
 
 // SplitRequest struct for SplitRequest
 type SplitRequest struct {
-	Text string `json:"text"`
+	Text []string `json:"text"`
 	TargetChunkSize *int32 `json:"target_chunk_size,omitempty"`
 	ChunkOverlap *int32 `json:"chunk_overlap,omitempty"`
 	Separators []string `json:"separators,omitempty"`
@@ -34,12 +34,12 @@ type _SplitRequest SplitRequest
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewSplitRequest(text string) *SplitRequest {
+func NewSplitRequest(text []string) *SplitRequest {
 	this := SplitRequest{}
 	this.Text = text
 	var targetChunkSize int32 = 512
 	this.TargetChunkSize = &targetChunkSize
-	var chunkOverlap int32 = 0
+	var chunkOverlap int32 = 53
 	this.ChunkOverlap = &chunkOverlap
 	var keepSeparator bool = false
 	this.KeepSeparator = &keepSeparator
@@ -53,7 +53,7 @@ func NewSplitRequestWithDefaults() *SplitRequest {
 	this := SplitRequest{}
 	var targetChunkSize int32 = 512
 	this.TargetChunkSize = &targetChunkSize
-	var chunkOverlap int32 = 0
+	var chunkOverlap int32 = 53
 	this.ChunkOverlap = &chunkOverlap
 	var keepSeparator bool = false
 	this.KeepSeparator = &keepSeparator
@@ -61,9 +61,9 @@ func NewSplitRequestWithDefaults() *SplitRequest {
 }
 
 // GetText returns the Text field value
-func (o *SplitRequest) GetText() string {
+func (o *SplitRequest) GetText() []string {
 	if o == nil {
-		var ret string
+		var ret []string
 		return ret
 	}
 
@@ -72,15 +72,15 @@ func (o *SplitRequest) GetText() string {
 
 // GetTextOk returns a tuple with the Text field value
 // and a boolean to check if the value has been set.
-func (o *SplitRequest) GetTextOk() (*string, bool) {
+func (o *SplitRequest) GetTextOk() ([]string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Text, true
+	return o.Text, true
 }
 
 // SetText sets field value
-func (o *SplitRequest) SetText(v string) {
+func (o *SplitRequest) SetText(v []string) {
 	o.Text = v
 }
 
