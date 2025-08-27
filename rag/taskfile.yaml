@@ -27,7 +27,19 @@ tasks:
     cmds:
       - docker compose down
 
-  split-openapi:
-    desc: Splitter openapi
+  update-schema:
+    desc: splitter openapi
     cmds:
-      - curl localhost:9999/openapi.json
+      - curl localhost:9999/openapi.json | jq > schemas/openapi.split.json
+
+  generate-schema:
+    desc: splitter openapi
+    cmds:
+      - >
+        docker run --rm
+        -v ${PWD}:/local
+        openapitools/openapi-generator-cli generate
+        -i /local/schemas/openapi.split.json
+        -g go
+        -o /local/generated/split
+        --additional-properties=packageName=split
