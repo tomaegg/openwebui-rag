@@ -14,6 +14,8 @@ const (
 	milvusAddr        = "localhost:19530"
 	defaultDB         = "openwebui_rag"
 	defaultCollection = "rag_passage"
+	defaultDim        = 1024
+	defaultChunk      = 1024
 )
 
 type Migration struct {
@@ -61,7 +63,16 @@ func (m *Migration) CreateDB(ctx context.Context, dbName string) {
 	log.Infof("%+v", *db)
 }
 
+func (m *Migration) DropCollection(ctx context.Context, name string) {
+	// NOTE: 暂时丢弃并且重新创建
+	err := m.cli.DropCollection(ctx, milvusclient.NewDropCollectionOption(name))
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func (m *Migration) CreateCollection(ctx context.Context, name string) {
+	var err error
 	const (
 		vectorField  = "passage_vector"
 		idField      = "passage_id"
@@ -72,8 +83,8 @@ func (m *Migration) CreateCollection(ctx context.Context, name string) {
 
 	// fields
 	schema = schema.WithField(entity.NewField().WithName(idField).WithIsAutoID(false).WithDataType(entity.FieldTypeInt64).WithIsPrimaryKey(true))
-	schema = schema.WithField(entity.NewField().WithName(vectorField).WithDataType(entity.FieldTypeFloatVector).WithDim(5))
-	schema = schema.WithField(entity.NewField().WithName(contentField).WithDataType(entity.FieldTypeVarChar).WithMaxLength(1024))
+	schema = schema.WithField(entity.NewField().WithName(vectorField).WithDataType(entity.FieldTypeFloatVector).WithDim(defaultDim))
+	schema = schema.WithField(entity.NewField().WithName(contentField).WithDataType(entity.FieldTypeVarChar).WithMaxLength(defaultChunk))
 
 	indexOptions := []milvusclient.CreateIndexOption{
 		milvusclient.NewCreateIndexOption(name,
@@ -83,7 +94,7 @@ func (m *Migration) CreateCollection(ctx context.Context, name string) {
 	}
 
 	// collection
-	err := m.cli.CreateCollection(
+	err = m.cli.CreateCollection(
 		ctx,
 		milvusclient.NewCreateCollectionOption(name, schema).WithIndexOptions(indexOptions...))
 	if err != nil {
