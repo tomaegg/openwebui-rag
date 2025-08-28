@@ -18,5 +18,6 @@ func main() {
 
 	ctx := context.Background()
 	m := milvus.NewMigration(ctx)
+	defer m.Close()
 	m.Migrate(*recreate)
 }

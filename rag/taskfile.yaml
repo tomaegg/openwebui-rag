@@ -4,7 +4,7 @@ tasks:
   migrate:
     desc: run DB migration
     cmds:
-      - go run -v cmd/migration/main.go
+      - go run -v cmd/migration/main.go {{.CLI_ARGS}}
 
   embed:
     desc: run embedding

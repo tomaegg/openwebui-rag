@@ -11,11 +11,17 @@ import (
 )
 
 const (
-	milvusAddr        = "localhost:19530"
+	defaultMilvusAddr = "localhost:19530"
 	defaultDB         = "openwebui_rag"
 	defaultCollection = "rag_passage"
 	defaultDim        = 1024
 	defaultChunk      = 1024
+)
+
+const (
+	vectorField  = "passage_vector"
+	idField      = "passage_id"
+	contentField = "content"
 )
 
 type Migration struct {
@@ -23,15 +29,12 @@ type Migration struct {
 }
 
 func NewMigration(ctx context.Context) *Migration {
-	client, err := milvusclient.New(ctx, &milvusclient.ClientConfig{
-		Address: milvusAddr,
-	})
-	if err != nil {
-		log.Fatal(err)
-	}
+	return &Migration{cli: NewDefaultClient(ctx)}
+}
 
-	log.Infof("created milvus client: addr: %s", milvusAddr)
-	return &Migration{cli: client}
+func (m *Migration) Close() error {
+	ctx := context.TODO()
+	return m.cli.Close(ctx)
 }
 
 func (m *Migration) ListDB(ctx context.Context) []string {
@@ -73,17 +76,15 @@ func (m *Migration) DropCollection(ctx context.Context, name string) {
 
 func (m *Migration) CreateCollection(ctx context.Context, name string, recreate bool) {
 	var err error
-	const (
-		vectorField  = "passage_vector"
-		idField      = "passage_id"
-		contentField = "content"
-	)
 	schema := entity.NewSchema()
 	schema = schema.WithDynamicFieldEnabled(true)
 
-	// fields
-	schema = schema.WithField(entity.NewField().WithName(idField).WithIsAutoID(false).WithDataType(entity.FieldTypeInt64).WithIsPrimaryKey(true))
+	// NOTE: fields idx: sha256 64 bytes
+	schema = schema.WithField(entity.NewField().WithName(idField).WithIsAutoID(false).WithDataType(entity.FieldTypeVarChar).WithMaxLength(64).
+		WithIsPrimaryKey(true))
+
 	schema = schema.WithField(entity.NewField().WithName(vectorField).WithDataType(entity.FieldTypeFloatVector).WithDim(defaultDim))
+
 	schema = schema.WithField(entity.NewField().WithName(contentField).WithDataType(entity.FieldTypeVarChar).WithMaxLength(defaultChunk))
 
 	indexOptions := []milvusclient.CreateIndexOption{
@@ -95,6 +96,7 @@ func (m *Migration) CreateCollection(ctx context.Context, name string, recreate 
 
 	if recreate {
 		m.DropCollection(ctx, name)
+		log.WithField("name", name).Warn("old collection dropped")
 	}
 
 	// collection
@@ -109,8 +111,6 @@ func (m *Migration) CreateCollection(ctx context.Context, name string, recreate 
 
 func (m *Migration) Migrate(recreate bool) {
 	ctx := context.Background()
-	defer m.cli.Close(ctx)
-
 	m.CreateDB(ctx, defaultDB)
 	m.CreateCollection(ctx, defaultCollection, recreate)
 }
