@@ -98,6 +98,18 @@ services:
     networks:
       - appnet
 
+  milvus-webui:
+    container_name: milvus-webui
+    image: zilliz/attu:v2.6
+    environment:
+      - MILVUS_URL=standalone:19530
+    ports:
+      - "8888:3000"
+    networks:
+      - appnet
+    depends_on:
+      - standalone
+
 # ---------- Volumes ----------
 volumes:
   ollama:
