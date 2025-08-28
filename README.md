@@ -11,7 +11,7 @@ go tool task ...
 ## TODO
 
 - [x] 基于python实现文本分割, 写一个起一个简单的web服务, http+json传输即可
-- [ ] 完善go操纵milvus的逻辑, 增加插入和查询操作
+- [x] 完善go操纵milvus的逻辑, 增加插入和查询操作
 - [ ] 修改cmd/embed部分, 支持批量处理文件, 调用python的split api, 向量插入milvus
 
 ### 方案1
