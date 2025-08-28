@@ -48,28 +48,31 @@
           "topic"
         ]
       },
+      "SearchResultItem": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "The related text result"
+          },
+          "score": {
+            "type": "number",
+            "format": "float",
+            "description": "Relevance score between 0.0 and 1.0"
+          }
+        },
+        "required": [
+          "text",
+          "score"
+        ]
+      },
       "SearchResponse": {
         "type": "object",
         "properties": {
           "results": {
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "text": {
-                  "type": "string",
-                  "description": "The related text result"
-                },
-                "score": {
-                  "type": "number",
-                  "format": "float",
-                  "description": "Relevance score between 0.0 and 1.0"
-                }
-              },
-              "required": [
-                "text",
-                "score"
-              ]
+              "$ref": "#/components/schemas/SearchResultItem"
             },
             "description": "List of related text results with relevance scores"
           },

@@ -15,13 +15,16 @@ type SearchResponse struct {
 	Count int `json:"count"`
 
 	// Results List of related text results with relevance scores
-	Results []struct {
-		// Score Relevance score between 0.0 and 1.0
-		Score float32 `json:"score"`
+	Results []SearchResultItem `json:"results"`
+}
 
-		// Text The related text result
-		Text string `json:"text"`
-	} `json:"results"`
+// SearchResultItem defines model for SearchResultItem.
+type SearchResultItem struct {
+	// Score Relevance score between 0.0 and 1.0
+	Score float32 `json:"score"`
+
+	// Text The related text result
+	Text string `json:"text"`
 }
 
 // SearchByTopicJSONRequestBody defines body for SearchByTopic for application/json ContentType.

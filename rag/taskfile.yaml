@@ -1,6 +1,16 @@
 version: "3"
 
 tasks:
+  tool-server:
+    desc: run rag tool server
+    cmds:
+      - go run -v cmd/tool-server/main.go {{.CLI_ARGS}}
+
+  encode:
+    desc: run text encoding
+    cmds:
+      - go run -v cmd/encode/main.go {{.CLI_ARGS}}
+
   migrate:
     desc: run DB migration
     cmds:

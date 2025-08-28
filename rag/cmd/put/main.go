@@ -65,7 +65,7 @@ func (p *Process) Do(ctx context.Context, path string) error {
 	}
 
 	// 2. embed the passage
-	vecs, err := embed.Embed(words)
+	vecs, err := embed.Embed(words...)
 	if err != nil {
 		return err
 	}

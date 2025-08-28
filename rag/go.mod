@@ -6,6 +6,7 @@ require (
 	github.com/labstack/echo/v4 v4.5.0
 	github.com/milvus-io/milvus/client/v2 v2.6.0
 	github.com/ollama/ollama v0.11.7
+	github.com/samber/lo v1.27.0
 	github.com/sirupsen/logrus v1.9.3
 )
 
@@ -56,6 +57,7 @@ require (
 	github.com/go-task/template v0.2.0 // indirect
 	github.com/godbus/dbus/v5 v5.0.4 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
+	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/google/btree v1.1.2 // indirect
@@ -103,7 +105,6 @@ require (
 	github.com/puzpuzpuz/xsync/v3 v3.5.1 // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
 	github.com/sajari/fuzzy v1.0.0 // indirect
-	github.com/samber/lo v1.27.0 // indirect
 	github.com/sergi/go-diff v1.3.2-0.20230802210424-5b0b94c5c0d3 // indirect
 	github.com/shirou/gopsutil/v3 v3.22.9 // indirect
 	github.com/skeema/knownhosts v1.3.1 // indirect

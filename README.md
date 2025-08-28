@@ -6,12 +6,21 @@
 - Milvus WebUI: http://localhost:8888
 - Ollama: http://localhost:11434
 - Python Text Splitter Server: http://localhost:9999
+- Go RAG Tool Server: http://localhost:8080
 - openwebui: http://localhost:3000
 
 ## Developement
 
 ```shell
 go tool task ...
+```
+
+### try search
+
+```shell
+curl -X POST http://localhost:8080/search \
+     -H "Content-Type: application/json" \
+     -d '{"topic": "你的主题文本"}'
 ```
 
 ## TODO

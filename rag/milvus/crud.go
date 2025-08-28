@@ -21,7 +21,7 @@ type UpsertReq struct {
 }
 
 type QueryResp struct {
-	Scores  float32
+	Score   float32
 	Content string
 }
 
@@ -79,6 +79,7 @@ func (c *RagCli) Search(ctx context.Context, limit int, qvecs ...entity.Vector) 
 	)
 	opts = opts.WithConsistencyLevel(entity.ClStrong)
 	opts = opts.WithANNSField(vectorField)
+	opts = opts.WithOutputFields(contentField)
 
 	ret, err := c.cli.Search(ctx, opts)
 	if err != nil {
@@ -88,6 +89,9 @@ func (c *RagCli) Search(ctx context.Context, limit int, qvecs ...entity.Vector) 
 	var qresp []QueryResp
 
 	for _, resp := range ret {
+		log.WithField("resp_len", resp.Len()).Info("data fetched")
+		log.Infof("%+v", resp.Fields)
+
 		col := resp.GetColumn(contentField)
 
 		for j := range col.Len() {
@@ -97,7 +101,7 @@ func (c *RagCli) Search(ctx context.Context, limit int, qvecs ...entity.Vector) 
 				continue
 			}
 			qresp = append(qresp, QueryResp{
-				Scores:  resp.Scores[j],
+				Score:   resp.Scores[j],
 				Content: content,
 			})
 		}
