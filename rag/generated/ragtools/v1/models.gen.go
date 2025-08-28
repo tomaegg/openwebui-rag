@@ -14,11 +14,14 @@ type SearchResponse struct {
 	// Count Number of results
 	Count int `json:"count"`
 
-	// Relevance Relevance score between 0.0 and 1.0
-	Relevance float32 `json:"relevance"`
+	// Results List of related text results with relevance scores
+	Results []struct {
+		// Score Relevance score between 0.0 and 1.0
+		Score float32 `json:"score"`
 
-	// Results List of related text results
-	Results []string `json:"results"`
+		// Text The related text result
+		Text string `json:"text"`
+	} `json:"results"`
 }
 
 // SearchByTopicJSONRequestBody defines body for SearchByTopic for application/json ContentType.
