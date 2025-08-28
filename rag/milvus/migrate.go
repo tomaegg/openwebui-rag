@@ -71,7 +71,7 @@ func (m *Migration) DropCollection(ctx context.Context, name string) {
 	}
 }
 
-func (m *Migration) CreateCollection(ctx context.Context, name string) {
+func (m *Migration) CreateCollection(ctx context.Context, name string, recreate bool) {
 	var err error
 	const (
 		vectorField  = "passage_vector"
@@ -93,6 +93,10 @@ func (m *Migration) CreateCollection(ctx context.Context, name string) {
 		),
 	}
 
+	if recreate {
+		m.DropCollection(ctx, name)
+	}
+
 	// collection
 	err = m.cli.CreateCollection(
 		ctx,
@@ -103,10 +107,10 @@ func (m *Migration) CreateCollection(ctx context.Context, name string) {
 	log.Infof("collection created: %v", name)
 }
 
-func (m *Migration) Migrate() {
+func (m *Migration) Migrate(recreate bool) {
 	ctx := context.Background()
 	defer m.cli.Close(ctx)
 
 	m.CreateDB(ctx, defaultDB)
-	m.CreateCollection(ctx, defaultCollection)
+	m.CreateCollection(ctx, defaultCollection, recreate)
 }
