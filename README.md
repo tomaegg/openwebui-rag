@@ -1,6 +1,12 @@
-## Milvus Management
+## Management
 
-浏览器进入milvus [管理界面](http://localhost:9091/webui)
+- Milvus Default DB: `openwebui_rag`
+- Milvus Default Collection: `rag_passage`
+- Milvus Default WebUI: http://localhost:9091/webui
+- Milvus WebUI: http://localhost:8888
+- Ollama: http://localhost:11434
+- Python Text Splitter Server: http://localhost:9999
+- openwebui: http://localhost:3000
 
 ## Developement
 
@@ -12,7 +18,7 @@ go tool task ...
 
 - [x] 基于python实现文本分割, 写一个起一个简单的web服务, http+json传输即可
 - [x] 完善go操纵milvus的逻辑, 增加插入和查询操作
-- [ ] 修改cmd/embed部分, 支持批量处理文件, 调用python的split api, 向量插入milvus
+- [x] 修改cmd/embed部分, 支持批量处理文件, 调用python的split api, 向量插入milvus
 
 ### 方案1
 
