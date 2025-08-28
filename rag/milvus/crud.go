@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
+	"fmt"
 
 	"github.com/milvus-io/milvus/client/v2/entity"
 	"github.com/milvus-io/milvus/client/v2/milvusclient"
@@ -14,9 +15,9 @@ type RagCli struct {
 	cli *milvusclient.Client
 }
 
-type InsertReq struct {
-	Vector  []float32
-	Content []byte
+type UpsertReq struct {
+	Vector  [][]float32
+	Content []string
 }
 
 type QueryResp struct {
@@ -35,24 +36,28 @@ func Sha256(content []byte) string {
 	return hashStr
 }
 
-func (c *RagCli) Upsert(ctx context.Context, req ...InsertReq) (int64, error) {
-	n := len(req)
+func (c *RagCli) Close(ctx context.Context) error {
+	return c.cli.Close(ctx)
+}
+
+func (c *RagCli) Upsert(ctx context.Context, req UpsertReq) (int64, error) {
+	if len(req.Content) != len(req.Vector) {
+		return -1, fmt.Errorf("vecs: %d != content: %d", len(req.Content), len(req.Vector))
+	}
+	n := len(req.Content)
 	if n < 1 {
 		return 0, nil
 	}
-	vecs := make([][]float32, 0, n)
-	contents := make([]string, 0, n)
-	idx := make([]string, 0, n)
 
+	idx := make([]string, 0, n)
 	for i := range n {
-		vecs = append(vecs, req[i].Vector)
-		contents = append(contents, string(req[i].Content))
-		idx = append(idx, Sha256(req[i].Content))
+		b := []byte(req.Content[i])
+		idx = append(idx, Sha256(b))
 	}
 
 	opts := milvusclient.NewColumnBasedInsertOption(defaultCollection)
-	opts = opts.WithFloatVectorColumn(vectorField, defaultDim, vecs)
-	opts = opts.WithVarcharColumn(contentField, contents)
+	opts = opts.WithFloatVectorColumn(vectorField, defaultDim, req.Vector)
+	opts = opts.WithVarcharColumn(contentField, req.Content)
 	opts = opts.WithVarcharColumn(idField, idx)
 
 	ret, err := c.cli.Upsert(ctx, opts)

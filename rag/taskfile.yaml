@@ -6,11 +6,11 @@ tasks:
     cmds:
       - go run -v cmd/migration/main.go {{.CLI_ARGS}}
 
-  embed:
-    desc: run embedding
+  put:
+    desc: run data uploading
     dotenv: [".env"]
     cmds:
-      - go run -v cmd/embed/main.go
+      - go run -v cmd/put/main.go {{.CLI_ARGS}}
 
   build:
     desc: build RAG service
