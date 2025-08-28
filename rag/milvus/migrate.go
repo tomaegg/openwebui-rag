@@ -15,7 +15,7 @@ const (
 	defaultDB         = "openwebui_rag"
 	defaultCollection = "rag_passage"
 	defaultDim        = 1024
-	defaultChunk      = 1024
+	defaultChunk      = 2048
 )
 
 const (

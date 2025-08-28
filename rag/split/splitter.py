@@ -21,7 +21,8 @@ class TextSplitter:
         self.text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=target_chunk_size,
             chunk_overlap=chunk_overlap,
-            separators=separators or ["。", "？", "！", "；", "\n"],
+            separators=separators
+            or ["。", "？", "！", "；", "\n", ",", ".", ";", "!", "?"],
             keep_separator=keep_separator,
         )
 
@@ -32,6 +33,7 @@ class TextSplitter:
 
 
 # ----------- FastAPI 部分 -----------
+
 
 class SplitRequest(BaseModel):
     text: list[str]
@@ -45,13 +47,16 @@ class SplitResponse(BaseModel):
     chunks: List[str]
     count: int
 
+
 splitter = TextSplitter()
+
 
 @app.post("/split", response_model=SplitResponse)
 def split_text(req: SplitRequest):
     chunks = splitter.split(req.text)
     # TODO: 如果不是默认参数，需要新建splitter, 暂时不考虑
     return SplitResponse(chunks=chunks, count=len(chunks))
+
 
 @app.get("/")
 def root():
