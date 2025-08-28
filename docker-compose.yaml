@@ -9,9 +9,11 @@ services:
     restart: unless-stopped
     volumes:
       - ollama:/root/.ollama
+      - ./entrypoint.sh:/entrypoint.sh
     runtime: nvidia
     devices:
       - nvidia.com/gpu=all
+    entrypoint: ["/bin/sh", "/entrypoint.sh"]
 
   openwebui:
     networks:
