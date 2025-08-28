@@ -1,0 +1,5 @@
+package: v1
+generate:
+  models: true
+output: generated/ragtools/v1/models.gen.go
+

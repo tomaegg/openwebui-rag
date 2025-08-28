@@ -1,0 +1,5 @@
+package: v1
+generate:
+  echo-server: true
+  models: false
+output: generated/ragtools/v1/server.gen.go

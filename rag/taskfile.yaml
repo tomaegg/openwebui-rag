@@ -50,6 +50,13 @@ tasks:
         -o /local/generated/split
         --additional-properties=packageName=split
 
+  generate-tools-schema:
+    desc: generate echo server for splitter
+    cmds:
+      - go tool oapi-codegen -config schemas/types.cfg.yaml schemas/openapi.tools.json
+      - go tool oapi-codegen -config schemas/server.cfg.yaml schemas/openapi.tools.json
+      - go fmt ./generated/ragtools/...
+
   split-schema:
     desc: generate split schema
     cmds:

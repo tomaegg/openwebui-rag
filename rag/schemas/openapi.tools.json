@@ -1,0 +1,79 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Topic Search API",
+    "version": "1.0"
+  },
+  "paths": {
+    "/search": {
+      "post": {
+        "summary": "Search by Topic",
+        "operationId": "SearchByTopic",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SearchRequest": {
+        "type": "object",
+        "properties": {
+          "topic": {
+            "type": "string",
+            "description": "The topic to search for"
+          }
+        },
+        "required": [
+          "topic"
+        ]
+      },
+      "SearchResponse": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of related text results"
+          },
+          "count": {
+            "type": "integer",
+            "description": "Number of results"
+          },
+          "relevance": {
+            "type": "number",
+            "format": "float",
+            "description": "Relevance score between 0.0 and 1.0"
+          }
+        },
+        "required": [
+          "results",
+          "count",
+          "relevance"
+        ]
+      }
+    }
+  }
+}
