@@ -112,6 +112,34 @@ services:
     depends_on:
       - standalone
 
+  text-splitter:
+    build:
+      context: ./rag/split
+      dockerfile: Dockerfile
+    image: rag/text-split-server:latest
+    container_name: text-splitter
+    networks:
+      - appnet
+    ports:
+      - "9999:8000"
+    restart: unless-stopped
+
+  tool-server:
+    build:
+      context: ./rag
+      dockerfile: Dockerfile
+    image: rag/tool-server:latest
+    container_name: tool-server
+    environment:
+      - SPLIT_HOST=http://text-splitter:8000
+      - MILVUS_ENDPOINT=http://standalone:19530
+      - OLLAMA_HOST=http://ollama:11434
+    networks:
+      - appnet
+    ports:
+      - "7777:8080"
+    restart: unless-stopped
+
 # ---------- Volumes ----------
 volumes:
   ollama:

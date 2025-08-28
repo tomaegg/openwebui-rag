@@ -3,11 +3,13 @@ version: "3"
 tasks:
   tool-server:
     desc: run rag tool server
+    dotenv: [".env"]
     cmds:
       - go run -v cmd/tool-server/main.go {{.CLI_ARGS}}
 
   encode:
     desc: run text encoding
+    dotenv: [".env"]
     cmds:
       - go run -v cmd/encode/main.go {{.CLI_ARGS}}
 
@@ -26,22 +28,6 @@ tasks:
     desc: build RAG service
     cmds:
       - docker compose build
-
-  up:
-    desc: launch RAG service
-    cmds:
-      - docker compose up -d
-
-  recreate:
-    desc: recreate RAG service
-    cmds:
-      - task: build
-      - task: up
-
-  down:
-    desc: down RAG service
-    cmds:
-      - docker compose down
 
   update-split-schema:
     desc: update splitter openapi

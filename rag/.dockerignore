@@ -1,0 +1,7 @@
+*.txt
+*.md
+*.yaml
+.openapi-generator/
+.docs/
+_input/
+_output/

@@ -8,8 +8,7 @@ import (
 )
 
 const (
-	defaultModel   = "bge-m3:567m"
-	defaultBaseURL = "http://localhost:11434"
+	defaultModel = "bge-m3:567m"
 )
 
 var client *api.Client

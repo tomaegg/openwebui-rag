@@ -1,0 +1,18 @@
+version: "3"
+
+tasks:
+  up:
+    desc: launch RAG service
+    cmds:
+      - docker compose up -d
+
+  recreate:
+    desc: recreate RAG service
+    cmds:
+      - docker compose build {{.CLI_ARGS}}
+      - docker compose up -d {{.CLI_ARGS}}
+
+  down:
+    desc: down RAG service
+    cmds:
+      - docker compose down

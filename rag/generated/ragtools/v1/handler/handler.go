@@ -7,6 +7,7 @@ import (
 	v1 "rag/generated/ragtools/v1"
 	"rag/milvus"
 	"rag/utils/embed"
+	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/milvus-io/milvus/client/v2/entity"
@@ -21,8 +22,10 @@ type ToolServer struct {
 var _ v1.ServerInterface = &ToolServer{}
 
 func NewToolServer() *ToolServer {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
 	return &ToolServer{
-		cli: milvus.NewRagCli(context.TODO()),
+		cli: milvus.NewRagCli(ctx),
 	}
 }
 

@@ -16,6 +16,7 @@ import (
 
 func main() {
 	log.SetLevel(log.InfoLevel)
+	log.Info("server is to be started")
 	gracefully()
 }
 
@@ -31,8 +32,10 @@ func gracefully() {
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
+
 	// Start server
 	go func() {
+		log.Info("server is running")
 		if err := e.Start(defaultAddr); err != nil && err != http.ErrServerClosed {
 			e.Logger.Fatal("shutting down the server")
 		}
