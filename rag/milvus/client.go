@@ -8,7 +8,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func NewDefaultClient(ctx context.Context) (*milvusclient.Client) {
+func NewDefaultClient(ctx context.Context) *milvusclient.Client {
 	addr := os.Getenv("MILVUS_ENDPOINT")
 	client, err := milvusclient.New(ctx, &milvusclient.ClientConfig{
 		Address: addr,
@@ -16,6 +16,9 @@ func NewDefaultClient(ctx context.Context) (*milvusclient.Client) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Infof("created milvus client: address: %s", addr)
+	if err := client.UseDatabase(ctx, milvusclient.NewUseDatabaseOption(defaultDB)); err != nil {
+		log.Fatal(err)
+	}
+	log.WithField("db", defaultDB).WithField("address", addr).Info("created milvus client")
 	return client
 }

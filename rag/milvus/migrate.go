@@ -76,6 +76,13 @@ func (m *Migration) DropCollection(ctx context.Context, name string) {
 
 func (m *Migration) CreateCollection(ctx context.Context, name string, recreate bool) {
 	var err error
+
+	err = m.cli.UseDatabase(ctx, milvusclient.NewUseDatabaseOption(defaultDB))
+	if err != nil {
+		log.Fatal(err)
+	}
+	logger := log.WithField("db", defaultDB).WithField("collection", name)
+
 	schema := entity.NewSchema()
 	schema = schema.WithDynamicFieldEnabled(true)
 
@@ -96,7 +103,7 @@ func (m *Migration) CreateCollection(ctx context.Context, name string, recreate 
 
 	if recreate {
 		m.DropCollection(ctx, name)
-		log.WithField("name", name).Warn("old collection dropped")
+		logger.Warn("old collection dropped")
 	}
 
 	// collection
@@ -106,7 +113,7 @@ func (m *Migration) CreateCollection(ctx context.Context, name string, recreate 
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Infof("collection created: %v", name)
+	logger.Info("collection created")
 }
 
 func (m *Migration) Migrate(recreate bool) {
