@@ -81,6 +81,10 @@ func (c *RagCli) Search(ctx context.Context, limit int, qvecs ...entity.Vector) 
 	opts = opts.WithANNSField(vectorField)
 	opts = opts.WithOutputFields(contentField)
 
+	if err := c.cli.UseDatabase(ctx, milvusclient.NewUseDatabaseOption(defaultDB)); err != nil {
+		return nil, err
+	}
+
 	ret, err := c.cli.Search(ctx, opts)
 	if err != nil {
 		return nil, err
